@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>У меня есть к тебе вопрос... ✨</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ffe6e6 0%, #ffb3ba 100%);
+            margin: 0;
+            overflow: hidden;
+        }
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            max-width: 400px;
+            width: 90%;
+        }
+        h1 { color: #d32f2f; margin-bottom: 30px; font-size: 24px; }
+        .buttons { 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            gap: 20px; 
+            margin-top: 20px; 
+            height: 50px;
+            position: relative; 
+        }
+        button {
+            padding: 12px 28px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        #yesBtn { 
+            background-color: #4caf50; 
+            color: white; 
+            transition: transform 0.2s;
+        }
+        #yesBtn:hover { transform: scale(1.1); }
+        #noBtn { 
+            background-color: #f44336; 
+            color: white; 
+            position: absolute; 
+            transition: all 0.1s ease;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1 id="question">Пойдешь со мной на свидание? ☕✨</h1>
+        <div class="buttons" id="btnContainer">
+            <button id="yesBtn" onclick="sendAnswer()">Да!</button>
+            <button id="noBtn" onmouseover="moveButton()" onclick="moveButton()">Нет</button>
+        </div>
+    </div>
+
+    <script>
+        // Функция, которая заставляет кнопку "Нет" убегать
+        function moveButton() {
+            const noBtn = document.getElementById('noBtn');
+            
+            // Вычисляем случайные координаты в пределах экрана, делая отступы
+            const padding = 100;
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - padding) + padding/2;
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - padding) + padding/2;
+            
+            noBtn.style.left = x + 'px';
+            noBtn.style.top = y + 'px';
+        }
+
+        // Функция отправки ответа на вашу почту
+        function sendAnswer() {
+            const question = document.getElementById('question');
+            const btnContainer = document.getElementById('btnContainer');
+            
+            // Меняем текст на экране сразу
+            question.innerHTML = "Ура! 🎉 <br><span style='font-size:18px; color:#555;'>Я свяжусь с тобой в мессенджере!</span>";
+            btnContainer.style.display = 'none';
+
+            // Отправляем скрытый запрос на Web3Forms, который перенаправит письмо вам
+            fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    access_key: 'ВАШ_КЛЮЧ_С_САЙТА', // <-- ВСТАВЬТЕ СВОЙ КЛЮЧ СЮДА
+                    subject: 'Она согласилась на свидание! ❤️',
+                    message: 'Уведомление: Кнопка "Да" была успешно нажата!'
+                })
+            });
+        }
+    </script>
+</body>
+</html>
